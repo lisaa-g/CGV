@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  canvas {
+    border: 1px solid black;
+  }
+</style>
+</head>
+<body>
+  <canvas id="submarineCanvas" width="800" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById("submarineCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Draw the submarine
+    function drawSubmarine(x, y) {
+      ctx.fillStyle = "#2c3e50"; // Submarine body color
+      ctx.fillRect(x, y, 100, 40);
+      ctx.fillStyle = "#2980b9"; // Submarine top color
+      ctx.fillRect(x + 40, y - 20, 20, 20);
+
+      // Propeller
+      ctx.fillStyle = "#34495e";
+      ctx.fillRect(x - 10, y + 10, 10, 20);
+      ctx.fillRect(x + 100, y + 10, 10, 20);
+
+      // Periscope
+      ctx.fillStyle = "#95a5a6";
+      ctx.fillRect(x + 45, y - 50, 10, 50);
+      ctx.fillStyle = "#bdc3c7";
+      ctx.fillRect(x + 40, y - 60, 20, 10);
+    }
+
+    // Animation loop
+    let submarineX = 100;
+    let submarineY = canvas.height - 60;
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawSubmarine(submarineX, submarineY);
+      submarineX += 1; // Move the submarine
+      requestAnimationFrame(animate);
+    }
+
+    animate(); // Start the animation
+  </script>
+</body>
+</html>

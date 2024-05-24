@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfishCanvas" width="400" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('starfishCanvas');
+        const context = canvas.getContext('2d');
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const armLength = 50;
+        const armInset = 20;
+        const numArms = 5;
+
+        context.beginPath();
+        context.moveTo(centerX, centerY - armLength);
+
+        for (let i = 0; i < numArms * 2; i++) {
+            const angle = Math.PI / numArms * i;
+            const radius = i % 2 === 0 ? armLength : armLength - armInset;
+
+            const armX = centerX + Math.cos(angle) * radius;
+            const armY = centerY + Math.sin(angle) * radius;
+
+            if (i === 0) {
+                context.moveTo(armX, armY);
+            } else {
+                context.lineTo(armX, armY);
+            }
+        }
+
+        context.closePath();
+        context.fillStyle = 'orange';
+        context.fill();
+        context.strokeStyle = 'black';
+        context.lineWidth = 2;
+        context.stroke();
+    </script>
+</body>
+</html>
+

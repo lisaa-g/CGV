@@ -1,0 +1,133 @@
+<html>
+    <head>
+        <title>Page Title</title>
+        <script>
+            var canvas;
+            var graphics;
+
+            function line(x1, y1, x2, y2){
+                graphics.beginPath();
+                graphics.moveTo(x1, y1);
+                graphics.lineTo(x2, y2);
+                graphics.stroke();
+            }
+
+            //create the grid for 3.2.3
+            function grid(){
+                for (let i = 0; i < 11; i++){
+                    line(i*60, 0, i*60, 600);
+                }
+                for (let i = 0; i< 11; i++){
+                    line(0, i*60, 600, i*60);
+                }
+                graphics.stroke();
+                graphics.strokeStyle = "#ff0000";
+                line(300, 0, 300, 600);
+                line(0, 300, 600, 300);
+            }
+
+            //create the circle
+            function circle(radius, centre){
+                graphics.strokeStyle = "rgb(0,0,0)";
+                graphics.beginPath()
+                graphics.arc(centre, centre, radius, 0, 2*Math.PI);
+                graphics.stroke();
+            }
+
+            //create the tics for the clock
+            function tics(){
+                //create the tics for the hours
+                for (let i = 0; i < 12; i++){
+                    angle = i * (Math.PI * 2) / 12;
+
+                    x1 = Math.cos(angle) * (230) + 300;
+                    y1 = Math.sin(angle) * (230) + 300;
+                    x2 = Math.cos(angle) * (210) + 300;
+                    y2 = Math.sin(angle) * (210) + 300;
+
+                    line(x1,y1,x2,y2);
+                }
+
+                //create the tics for the minutes
+                for (let i = 0; i < 60; i++){
+                    angle = i * (Math.PI * 2) / 60;
+
+                    x1 = Math.cos(angle) * (240) + 300;
+                    y1 = Math.sin(angle) * (240) + 300;
+                    x2 = Math.cos(angle) * (235) + 300;
+                    y2 = Math.sin(angle) * (235) + 300;
+
+                    line(x1,y1,x2,y2);
+                }
+            }
+
+            function hands(date){
+                hour = date.getHours();
+                min = date.getMinutes();
+                sec = date.getSeconds();
+                milli = date.getMilliseconds();
+
+                //create second hand
+                graphics.stroke();
+                graphics.strokeStyle = "#ff0000";
+                angleSec = ((Math.PI*2) * (sec + milli/1000)/60) - (0.5*Math.PI);
+                line(300,300, (Math.cos(angleSec) * (240) + 300), (Math.sin(angleSec) * (240) + 300))
+
+                //create minute hand
+                graphics.strokeStyle = "rgb(0,0,0)";
+                angleMin = ((Math.PI*2) * ((min + sec/60)/60)) - (0.5*Math.PI);
+                line(300,300, (Math.cos(angleMin) * (180) + 300), (Math.sin(angleMin) * (180) + 300))
+
+                //create hour hand
+                angleHour = ((Math.PI * 2) * ((hour * 5 + (min / 60) * 5) / 60)) - (0.5*Math.PI);
+                line(300,300, (Math.cos(angleHour) * (120) + 300), (Math.sin(angleHour) * (120) + 300))
+            }
+
+            //my additional function that draws the numbers on the clock face
+            function drawNumbers(){
+                graphics.font = "20px Times New Roman";
+                graphics.textAlign = "center";
+                graphics.textBaseline = "middle";
+                for (let i = 1; i <= 12; i++) {
+                    angle = (i-3) * (Math.PI * 2) / 12; // Adjust angle to start from 12 o'clock
+                    x = Math.cos(angle) * (195) + 300;
+                    y = Math.sin(angle) * (195) + 300;
+                    graphics.fillText(i.toString(), x, y);
+                }
+            }
+
+            function init(){
+                canvas = document.getElementById("myCanvas");
+                graphics = canvas.getContext("2d");
+
+                graphics.clearRect(0,0, canvas.width, canvas.height);
+                //grid();
+                let radius = 240;
+                let centre = 300;
+                circle(radius, centre);
+                tics();
+                drawNumbers();
+
+                let d = new Date();
+                document.getElementById("timeID").innerHTML = d;
+
+                hands(d);
+                //allows the clock to reset every 10ms so that the second hand can move smoothly
+                setTimeout(init,10)
+            }
+        </script>
+    </head>
+    <body onload="init()">
+        <h1>Lisa Godwin 2437980 Clock</h1>
+        <p id="timeID"></p></p>
+        <canvas id="myCanvas" width="600" height="600"
+        style="border:1px solid #d3d3d3;">
+        Your browser does not support the HTML5 canvas tag.
+    </canvas>
+</body>
+<script>
+    setInterval(init, 1000);
+    // This will run as the browser's interpreter reaches the line.
+    alert("Hello World!");
+</script>
+</html>
